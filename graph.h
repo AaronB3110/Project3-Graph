@@ -9,7 +9,7 @@
 
 using namespace std;
 // Structure to hold the information of states
-struct vertex
+/*struct vertex
 {
     string name;
     int passengers;
@@ -27,19 +27,18 @@ struct vertex
         this->milesflown = milesFlown;
     };
     
-};
+};*/
 
 // Class to create the data structure of a graph
 class graph
 {
 private:
-    map<string, int> mapCodes;
-    map<string, string> mapAbbvs;
-    vertex stateGraph[STATENUM][STATENUM];
+    //map<string, int> mapCodes;
+    //map<string, string> mapAbbvs;
+    pair<int, int> stateGraph[STATENUM][STATENUM];
 public:
     graph();
-    void loadGraph(string filen);
-    void addEdge(string from, string to, vertex vertex);
+    void loadGraph(string filen, map<string, int> mapCode);
     void updatePassenger(string to, int passengers);
     void updateMiles(string to, int miles);
 };

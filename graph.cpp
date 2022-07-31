@@ -1,10 +1,9 @@
 #include "graph.h"
 graph::graph(){
-    map<string, int> mapCodes;
-    map<string, string> mapAbbvs;
-    vertex stateGraph[STATENUM][STATENUM];
+    pair<int, int> stateGraph[STATENUM][STATENUM] = {make_pair(0,0)}; // Graph implement First : Passengers, Second: Miles
 }
-void graph::loadGraph(string filen){
+
+void graph::loadGraph(string filen, map<string, int> mapCodes){
     // Object to read CSV file with flight info
     fstream inFile;
 
@@ -25,30 +24,46 @@ void graph::loadGraph(string filen){
         string line = "";
         cout << "Hello World" << endl;
         while(getline(inFile, line)){
-            
+            // Parse the line
             stringstream ss(line);
 
+            // Collect the abreviation from the state FROM
             getline(ss, from, ',');
 
+            // Collect the abreviation from the state TO
             getline(ss, to, ',');
 
+            // Collect the amount of passengers in the flight
             string tempPass;
             getline(ss, tempPass, ',');
             passengers = stoi(tempPass);
-            cout << passengers << " ";
 
+            // Collect the miles flown in the flight;
             string tempMiles;
             getline(ss, tempMiles, ',');
             milesFlown = stoi(tempMiles);
-            cout << milesFlown << endl;
 
+            //insert data into the adjacency matrix
+            // Check if the graph has any information in it
+            if(stateGraph[mapCodes[from]][mapCodes[to]] == make_pair(0,0)){
+                // change the data in the position of the vertex if there is no data
+                stateGraph[mapCodes[from]][mapCodes[to]].first = passengers;
+                stateGraph[mapCodes[from]][mapCodes[to]].second = milesFlown;
+            } else {
+                // update the data in the position of the vertex if there is data
+                stateGraph[mapCodes[from]][mapCodes[to]].first += passengers;
+                if(milesFlown < stateGraph[mapCodes[from]][mapCodes[to]].second){
+                    stateGraph[mapCodes[from]][mapCodes[to]].second = milesFlown;
+                }
+            }
+
+            // Reset every value
             tempMiles = "";
             tempPass = "";
+            passengers = 0;
+            milesFlown = 0;
             line = "";
         }
     }
 }
 
-void graph::addEdge(string from, string to, vertex vertex){
-    stateGraph[mapCodes[from]][mapCodes[to]] = vertex;
-}

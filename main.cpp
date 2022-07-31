@@ -29,8 +29,8 @@ void loadStates(string filen, map<string, string> &stateAbbvs, map<string, int> 
             // Getting the state Abbreviation from the CSV file
             getline(ss, stateAbbv, ',');
 
+
             // Assigning the unique ids to the states
-            
             if(!stateAbbvs.count(stateAbbv)){
                 stateAbbvs[stateAbbv] = stateName;
             }
@@ -47,8 +47,9 @@ int main(){
     map<string, string> stateAbv;
     map<string, int> stateCod;
     graph graph;
-    //graph.loadGraph("Flights.csv");
 
     loadStates("StateCodes.csv", stateAbv, stateCod);
+    graph.loadGraph("Flights.csv", stateCod);
+
 
 }
