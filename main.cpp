@@ -43,7 +43,12 @@ void loadStates(string filen, map<string, string> &stateAbbvs, map<string, int> 
     }
 }
 
-
 int main(){
-    return 0;
+    map<string, string> stateAbv;
+    map<string, int> stateCod;
+    graph graph;
+    //graph.loadGraph("Flights.csv");
+
+    loadStates("StateCodes.csv", stateAbv, stateCod);
+
 }

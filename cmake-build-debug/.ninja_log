@@ -1,0 +1,27 @@
+# ninja log v5
+0	955	6809945764841055	CMakeFiles/Project_3___Graph_and_Flights.dir/graph.cpp.obj	ea483fdc883e8e42
+8	1049	6809945765795363	CMakeFiles/Project_3___Graph_and_Flights.dir/main.cpp.obj	f9fc32023cef0b35
+1049	1221	6809945767468039	Project_3___Graph_and_Flights.exe	3dcb566ddd1d8eac
+5	869	6809946673053758	CMakeFiles/Project_3___Graph_and_Flights.dir/graph.cpp.obj	ea483fdc883e8e42
+871	1062	6809946674851952	Project_3___Graph_and_Flights.exe	3dcb566ddd1d8eac
+4	798	6809947273353770	CMakeFiles/Project_3___Graph_and_Flights.dir/main.cpp.obj	f9fc32023cef0b35
+799	943	6809947274767817	Project_3___Graph_and_Flights.exe	3dcb566ddd1d8eac
+5	783	6809947882702307	CMakeFiles/Project_3___Graph_and_Flights.dir/main.cpp.obj	f9fc32023cef0b35
+783	928	6809947884102456	Project_3___Graph_and_Flights.exe	3dcb566ddd1d8eac
+7	2065	6809949492961327	CMakeFiles/Project_3___Graph_and_Flights.dir/graph.cpp.obj	ea483fdc883e8e42
+2067	2450	6809949496341118	Project_3___Graph_and_Flights.exe	3dcb566ddd1d8eac
+4	777	6809950977586965	CMakeFiles/Project_3___Graph_and_Flights.dir/graph.cpp.obj	ea483fdc883e8e42
+778	940	6809950979173874	Project_3___Graph_and_Flights.exe	3dcb566ddd1d8eac
+12	1081	6809959872217505	CMakeFiles/Project_3___Graph_and_Flights.dir/graph.cpp.obj	ea483fdc883e8e42
+4	1114	6809959872593522	CMakeFiles/Project_3___Graph_and_Flights.dir/main.cpp.obj	f9fc32023cef0b35
+1115	1276	6809959874125322	Project_3___Graph_and_Flights.exe	3dcb566ddd1d8eac
+5	760	6809960293909914	CMakeFiles/Project_3___Graph_and_Flights.dir/main.cpp.obj	f9fc32023cef0b35
+761	928	6809960295509747	Project_3___Graph_and_Flights.exe	3dcb566ddd1d8eac
+5	1168	6809960629412838	CMakeFiles/Project_3___Graph_and_Flights.dir/graph.cpp.obj	ea483fdc883e8e42
+1169	1453	6809960632212264	Project_3___Graph_and_Flights.exe	3dcb566ddd1d8eac
+4	866	6809984888159900	CMakeFiles/Project_3___Graph_and_Flights.dir/main.cpp.obj	f9fc32023cef0b35
+867	1348	6809984892850618	Project_3___Graph_and_Flights.exe	3dcb566ddd1d8eac
+4	742	6809985127299370	CMakeFiles/Project_3___Graph_and_Flights.dir/main.cpp.obj	f9fc32023cef0b35
+743	893	6809985128776813	Project_3___Graph_and_Flights.exe	3dcb566ddd1d8eac
+3	822	6809985466220626	CMakeFiles/Project_3___Graph_and_Flights.dir/main.cpp.obj	f9fc32023cef0b35
+823	960	6809985467537642	Project_3___Graph_and_Flights.exe	3dcb566ddd1d8eac
