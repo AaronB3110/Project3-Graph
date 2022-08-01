@@ -5,6 +5,10 @@
 #include <string>
 #include <map>
 #include <vector>
+#include <set>
+#include <queue>
+#include <stack>
+#include <algorithm>
 #pragma once
 
 using namespace std;
@@ -39,6 +43,7 @@ private:
 public:
     graph();
     void loadGraph(string filen, map<string, int> mapCode);
-    void updatePassenger(string to, int passengers);
-    void updateMiles(string to, int miles);
+    void DFS(int from, vector<pair<int,int>>& positions);
+    vector<pair<pair<int, int>, int>> getAdj(int i);
+    void BFS(int from, vector<pair<int, int>> &input);
 };
