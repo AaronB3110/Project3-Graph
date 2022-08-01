@@ -67,3 +67,97 @@ void graph::loadGraph(string filen, map<string, int> mapCodes){
     }
 }
 
+void graph::DFS(int from, vector<pair<int,int>>& positions){
+    set<pair<int,int>> visitedPost;
+    stack<pair<int,int>> stackDFS;
+
+    int smallestMiles = 10000;
+    int positionY;
+
+    // Insert source nodes into stack and into visited set
+    visitedPost.insert(make_pair(from, from));
+    stackDFS.push(make_pair(from, from));
+
+    // While there are neighbors still checking for them and insert the position into the vector
+    while(!stackDFS.empty()){
+        from = stackDFS.top().first;
+        stackDFS.pop();
+
+        for(int i = 0; i < 4; i++){
+            for(int j = 0; j < STATENUM; j++){
+                visitedPost.insert(make_pair(from, j));
+                if(!visitedPost.count(make_pair(from, j))){
+
+                }
+                if(stateGraph[from][j].second < smallestMiles){
+                    smallestMiles = stateGraph[from][j].second;
+                    positionY = j;
+                }
+            }
+            positions.push_back(make_pair(from, positionY));
+        }
+    }
+}
+
+vector<pair<pair<int, int>, int>> graph::getAdj(int i) {
+
+    vector<pair< int, pair<int, int>>> neighbors;
+
+    for (int l = 0; l < STATENUM; l++) {
+        neighbors.push_back(make_pair(stateGraph[i][l].first ,make_pair(i, l)));
+
+    }
+
+    sort(neighbors.begin(), neighbors.end());
+
+    vector < pair<pair<int, int>, int>> top4Neighbors;
+
+    for (int k = 0; k < 4; k++) {
+        top4Neighbors.push_back(make_pair(neighbors[k].second, neighbors[k].first));
+    }
+
+
+    return top4Neighbors;
+
+
+}
+
+void graph::BFS(int from, vector<pair<int, int>> &input) {
+
+    int source = from;
+
+    set<pair<int, int>> visited;
+    queue<pair<int, int>> queState;
+    vector < pair<pair<int, int>, int >> distance;
+
+    vector<pair<int, int>> posOfAdjacents = input;
+
+    visited.insert(make_pair(source, source));
+    queState.push(make_pair(source, source));
+
+    while (queState.empty() != true) {
+        pair<int,int> currState = queState.front();
+        queState.pop();
+
+        vector<pair<pair<int, int>, int>> neighbors = graph::getAdj(currState.first);
+
+
+        for (int i = 0; i < neighbors.size(); i++) { //iterate thru adj
+
+            pair<int, int> adjState = neighbors[i].first;
+
+            if (visited.count(adjState) == 0) {
+                visited.insert(adjState);
+
+                input.push_back(adjState);
+
+                queState.push(adjState);
+
+            }
+        }
+
+    }
+
+
+}
+
