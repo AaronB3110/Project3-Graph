@@ -46,10 +46,16 @@ void loadStates(string filen, map<string, string> &stateAbbvs, map<string, int> 
 int main(){
     map<string, string> stateAbv;
     map<string, int> stateCod;
+    vector<pair<int,int>> positionsTest;
     graph graph;
 
     loadStates("StateCodes.csv", stateAbv, stateCod);
     graph.loadGraph("Flights.csv", stateCod);
 
+    graph.DFS(2, positionsTest);
+
+    for(int i = 0; i < positionsTest.size(); i++){
+        cout << positionsTest[i].first << " " << positionsTest[i].second << endl;
+    }
 
 }
