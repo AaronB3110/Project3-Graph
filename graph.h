@@ -20,6 +20,6 @@ public:
     graph();
     void loadGraph(string filen, map<string, int>& mapCode);
     void DFS(int from, vector<pair<int,int>>& positions);
-    void getAdj(int i, vector<pair<pair<int, int>,int>>& adj, set<int>& visited);
+    void getAdj(int i, vector<pair<pair<int, int>,int>>& adj);
     void BFS(int from, vector<pair<int, int>> &input);
 };

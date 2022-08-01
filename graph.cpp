@@ -94,7 +94,8 @@ void graph::DFS(int from, vector<pair<int,int>>& positions)
         stackDFS.pop();
 
         vector<pair<pair<int, int>, int>> neighbors;
-        graph::getAdj(nextState, neighbors, visitedState);
+        visitedState.insert(nextState);
+        graph::getAdj(nextState, neighbors);
 
         for (int i = 0; i < neighbors.size(); i++) { //iterate thru adj
 
@@ -115,10 +116,8 @@ void graph::DFS(int from, vector<pair<int,int>>& positions)
     }
 }
 
-void graph::getAdj(int i, vector<pair<pair<int, int>,int>>& adj, set<int>& visited)
+void graph::getAdj(int i, vector<pair<pair<int, int>,int>>& adj)
 {
-    visited.insert(i);
-
     vector<pair< int, pair<int, int>>> neighbors;
 
     for (int l = 0; l < STATENUM; l++)
@@ -131,7 +130,6 @@ void graph::getAdj(int i, vector<pair<pair<int, int>,int>>& adj, set<int>& visit
     }
 
     sort(neighbors.begin(), neighbors.end());
-
 
     if(neighbors.size() == 0)
     {
@@ -170,7 +168,8 @@ void graph::BFS(int from, vector<pair<int, int>>& input)
         queState.pop();
 
         vector<pair<pair<int, int>, int>> neighbors;
-        graph::getAdj(nextState, neighbors, visitedState);
+        visitedState.insert(nextState);
+        graph::getAdj(nextState, neighbors);
 
         for (int i = 0; i < neighbors.size(); i++) { //iterate thru adj
 
@@ -190,4 +189,3 @@ void graph::BFS(int from, vector<pair<int, int>>& input)
         }
     }
 }
-
