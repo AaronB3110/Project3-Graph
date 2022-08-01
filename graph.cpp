@@ -3,7 +3,7 @@ graph::graph(){
     pair<int, int> stateGraph[STATENUM][STATENUM] = {make_pair(0,0)}; // Graph implement First : Passengers, Second: Miles
 }
 
-void graph::loadGraph(string filen, map<string, int> mapCodes){
+void graph::loadGraph(string filen, map<string, int>& mapCodes ){
     // Object to read CSV file with flight info
     fstream inFile;
 
@@ -22,8 +22,8 @@ void graph::loadGraph(string filen, map<string, int> mapCodes){
     // Only load the graph if the file is open
     if(inFile.is_open()){
         string line = "";
-        cout << "Hello World" << endl;
-        while(getline(inFile, line)) {
+        //cout << "Hello World" << endl; // Test if file open
+        while(getline(inFile, line)){
             // Parse the line
             stringstream ss(line);
 
@@ -45,132 +45,149 @@ void graph::loadGraph(string filen, map<string, int> mapCodes){
 
             //insert data into the adjacency matrix
             // Check if the graph has any information in it
-            if (stateGraph[mapCodes[from]][mapCodes[to]] == make_pair(0, 0)) {
+
+            int fromMap = mapCodes[from];
+            int toMap = mapCodes[to];
+            if(stateGraph[fromMap][toMap] == make_pair(0,0)){
                 // change the data in the position of the vertex if there is no data
-                stateGraph[mapCodes[from]][mapCodes[to]].first = passengers;
-                stateGraph[mapCodes[from]][mapCodes[to]].second = milesFlown;
+                stateGraph[fromMap][toMap].first = passengers;
+                stateGraph[fromMap][toMap].second = milesFlown;
             } else {
                 // update the data in the position of the vertex if there is data
-                stateGraph[mapCodes[from]][mapCodes[to]].first += passengers;
-                if (milesFlown < stateGraph[mapCodes[from]][mapCodes[to]].second) {
-                    stateGraph[mapCodes[from]][mapCodes[to]].second = milesFlown;
+                stateGraph[fromMap][toMap].first += passengers;
+                if(milesFlown < stateGraph[fromMap][toMap].second){
+                    stateGraph[fromMap][toMap].second = milesFlown;
                 }
             }
 
-            /*// Reset every value
+            // Reset every value
             tempMiles = "";
             tempPass = "";
             passengers = 0;
             milesFlown = 0;
-            line = "";*/
-
-
+            line = "";
         }
     }
 }
 
-void graph::DFS(int from, vector<pair<int,int>>& positions){
+void graph::DFS(int from, vector<pair<int,int>>& positions)
+{
+    set<pair<int,int>> visited;
     set<int> visitedState;
-    stack<int> stackDFS;
-
-    int smallestMiles = 1000;
-    int positionY = 0;
+    stack<pair<int,int>> stackDFS;
+    vector < pair<pair<int, int>, int >> distance;
 
     // Insert source nodes into stack and into visited set
-    visitedState.insert(from);
-    stackDFS.push(from);
+    visited.insert(make_pair(from, from));
+    stackDFS.push(make_pair(from, from));
 
     // While there are neighbors still checking for them and insert the position into the vector
-    while(!stackDFS.empty()){
-        smallestMiles = 1000;
-        from = stackDFS.top();
+    while (!stackDFS.empty())
+    {
+        int currState = stackDFS.top().first;
+        int nextState = stackDFS.top().second;
+
+        if(visitedState.count(nextState) != 0 && visitedState.count(currState) == 0)
+        {
+            nextState = currState;
+        }
         stackDFS.pop();
 
-        for(int j = 0; j < STATENUM; j++){
-            if(stateGraph[from][j].second != 0){
-                
+        vector<pair<pair<int, int>, int>> neighbors;
+        graph::getAdj(nextState, neighbors, visitedState);
+
+        for (int i = 0; i < neighbors.size(); i++) { //iterate thru adj
+
+            pair<int, int> adjState = neighbors[i].first;
+
+            if(adjState.second < STATENUM && adjState.second >= 0 && adjState.first < STATENUM && adjState.first >= 0)
+            {
+                if (visited.count(adjState) == 0) {
+                    visited.insert(adjState);
+                    visited.insert(make_pair(adjState.second, adjState.first));
+
+                    positions.push_back(adjState);
+
+                    stackDFS.push(adjState);
+                }
             }
         }
     }
 }
 
-vector<pair<pair<int, int>, int>> graph::getAdj(int i) { //i current node, from is user input (using from so that we don't get back links)
+void graph::getAdj(int i, vector<pair<pair<int, int>,int>>& adj, set<int>& visited)
+{
+    visited.insert(i);
 
-    vector<pair< int, pair<int, int>>> neighbors;// distance, indexes
+    vector<pair< int, pair<int, int>>> neighbors;
 
-
-    for (int w = 0; w <= STATENUM; w++) {
-
-        for (int y = 0; y < STATENUM; y++) {
-            if (w == i) {
-                //if (y!= from) {
-                pair<int, int> vertexData = stateGraph[w][y];
-                neighbors.push_back(make_pair(stateGraph[w][y].second, make_pair(w, y)));
-                //}
-
-            }
-
+    for (int l = 0; l < STATENUM; l++)
+    {
+        if (stateGraph[i][l].first != 0)
+        {
+            neighbors.push_back(make_pair(stateGraph[i][l].second ,make_pair(i, l)));
         }
+
     }
 
     sort(neighbors.begin(), neighbors.end());
 
-    vector < pair<pair<int, int>, int>> top4Neighbors;
-    int numToTake = 0;
 
-    for (int k = 0; k < neighbors.size(); k++) {
-
-        // if (neighbors[k].second.second !=0) {
-        top4Neighbors.push_back(make_pair(neighbors[k].second, neighbors[k].first));
-        numToTake++;
-        //}
-
-        if (numToTake == 4) {
-            break;
+    if(neighbors.size() == 0)
+    {
+        return;
+    }
+    for (int k = 0; k < 11; k++) {
+        if(k < neighbors.size() && k != neighbors[k].second.second)
+        {
+            adj.push_back(make_pair(make_pair(neighbors[k].second.first, neighbors[k].second.second), neighbors[k].first));
         }
     }
-
-
-    return top4Neighbors;
-
-
 }
 
-void graph::BFS(int from, vector<pair<int, int>>& input) {
-
+void graph::BFS(int from, vector<pair<int, int>>& input)
+{
     int source = from;
 
     set<pair<int, int>> visited;
-    queue<int> queState;
+    set<int> visitedState;
+    queue<pair<int,int>> queState;
     vector < pair<pair<int, int>, int >> distance;
 
-    vector<pair<int, int>> posOfAdjacents = input;
 
     visited.insert(make_pair(source, source));
-    queState.push(source);
+    queState.push(make_pair(source,source));
 
-    while (queState.empty() != true) {
-        int currState = queState.front();
+    while (!queState.empty())
+    {
+        int currState = queState.front().first;
+        int nextState = queState.front().second;
+
+        if(visitedState.count(nextState) != 0 && visitedState.count(currState) == 0)
+        {
+            nextState = currState;
+        }
         queState.pop();
 
-        vector<pair<pair<int, int>, int>> neighbors = graph::getAdj(currState);
-
+        vector<pair<pair<int, int>, int>> neighbors;
+        graph::getAdj(nextState, neighbors, visitedState);
 
         for (int i = 0; i < neighbors.size(); i++) { //iterate thru adj
 
-            pair<int, int> adjState = neighbors[i].first; //indexes of adjacent vertexes
+            pair<int, int> adjState = neighbors[i].first;
 
-            if (visited.count(adjState) == 0) { //if vertices has not been visited
-                visited.insert(adjState); //insert vertex into visited set
+            if(adjState.second < STATENUM && adjState.second >= 0 && adjState.first < STATENUM && adjState.first >= 0)
+            {
+                if (visited.count(adjState) == 0) {
+                    visited.insert(adjState);
+                    visited.insert(make_pair(adjState.second, adjState.first));
 
-                input.push_back(adjState); //push vertex into return vector
+                    input.push_back(adjState);
 
-                queState.push(neighbors[i].first.second); //push the "to" value into the queue
-
+                    queState.push(adjState);
+                }
             }
         }
-
     }
-
-
 }
+
