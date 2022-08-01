@@ -52,7 +52,7 @@ int main(){
     loadStates("StateCodes.csv", stateAbv, stateCod);
     graph.loadGraph("Flights.csv", stateCod);
 
-    graph.DFS(2, positionsTest);
+    graph.BFS(12, positionsTest);
 
     for(int i = 0; i < positionsTest.size(); i++){
         cout << positionsTest[i].first << " " << positionsTest[i].second << endl;

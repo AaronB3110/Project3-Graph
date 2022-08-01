@@ -23,7 +23,7 @@ void graph::loadGraph(string filen, map<string, int> mapCodes){
     if(inFile.is_open()){
         string line = "";
         cout << "Hello World" << endl;
-        while(getline(inFile, line)){
+        while(getline(inFile, line)) {
             // Parse the line
             stringstream ss(line);
 
@@ -45,75 +45,89 @@ void graph::loadGraph(string filen, map<string, int> mapCodes){
 
             //insert data into the adjacency matrix
             // Check if the graph has any information in it
-            if(stateGraph[mapCodes[from]][mapCodes[to]] == make_pair(0,0)){
+            if (stateGraph[mapCodes[from]][mapCodes[to]] == make_pair(0, 0)) {
                 // change the data in the position of the vertex if there is no data
                 stateGraph[mapCodes[from]][mapCodes[to]].first = passengers;
                 stateGraph[mapCodes[from]][mapCodes[to]].second = milesFlown;
             } else {
                 // update the data in the position of the vertex if there is data
                 stateGraph[mapCodes[from]][mapCodes[to]].first += passengers;
-                if(milesFlown < stateGraph[mapCodes[from]][mapCodes[to]].second){
+                if (milesFlown < stateGraph[mapCodes[from]][mapCodes[to]].second) {
                     stateGraph[mapCodes[from]][mapCodes[to]].second = milesFlown;
                 }
             }
 
-            // Reset every value
+            /*// Reset every value
             tempMiles = "";
             tempPass = "";
             passengers = 0;
             milesFlown = 0;
-            line = "";
+            line = "";*/
+
+
         }
     }
 }
 
 void graph::DFS(int from, vector<pair<int,int>>& positions){
-    set<pair<int,int>> visitedPost;
-    stack<pair<int,int>> stackDFS;
+    set<int> visitedState;
+    stack<int> stackDFS;
 
-    int smallestMiles = 10000;
-    int positionY;
+    int smallestMiles = 1000;
+    int positionY = 0;
 
     // Insert source nodes into stack and into visited set
-    visitedPost.insert(make_pair(from, from));
-    stackDFS.push(make_pair(from, from));
+    visitedState.insert(from);
+    stackDFS.push(from);
 
     // While there are neighbors still checking for them and insert the position into the vector
     while(!stackDFS.empty()){
-        from = stackDFS.top().first;
+        smallestMiles = 1000;
+        from = stackDFS.top();
         stackDFS.pop();
 
-        for(int i = 0; i < 4; i++){
-            for(int j = 0; j < STATENUM; j++){
-                visitedPost.insert(make_pair(from, j));
-                if(!visitedPost.count(make_pair(from, j))){
-
-                }
-                if(stateGraph[from][j].second < smallestMiles){
-                    smallestMiles = stateGraph[from][j].second;
-                    positionY = j;
-                }
+        for(int j = 0; j < STATENUM; j++){
+            if(stateGraph[from][j].second != 0){
+                
             }
-            positions.push_back(make_pair(from, positionY));
         }
     }
 }
 
-vector<pair<pair<int, int>, int>> graph::getAdj(int i) {
+vector<pair<pair<int, int>, int>> graph::getAdj(int i) { //i current node, from is user input (using from so that we don't get back links)
 
-    vector<pair< int, pair<int, int>>> neighbors;
+    vector<pair< int, pair<int, int>>> neighbors;// distance, indexes
 
-    for (int l = 0; l < STATENUM; l++) {
-        neighbors.push_back(make_pair(stateGraph[i][l].first ,make_pair(i, l)));
 
+    for (int w = 0; w <= STATENUM; w++) {
+
+        for (int y = 0; y < STATENUM; y++) {
+            if (w == i) {
+                //if (y!= from) {
+                pair<int, int> vertexData = stateGraph[w][y];
+                neighbors.push_back(make_pair(stateGraph[w][y].second, make_pair(w, y)));
+                //}
+
+            }
+
+        }
     }
 
     sort(neighbors.begin(), neighbors.end());
 
     vector < pair<pair<int, int>, int>> top4Neighbors;
+    int numToTake = 0;
 
-    for (int k = 0; k < 4; k++) {
+    for (int k = 0; k < neighbors.size(); k++) {
+
+        // if (neighbors[k].second.second !=0) {
         top4Neighbors.push_back(make_pair(neighbors[k].second, neighbors[k].first));
+        numToTake++;
+        //}
+
+        if (numToTake == 4) {
+            break;
+        }
     }
 
 
@@ -122,36 +136,36 @@ vector<pair<pair<int, int>, int>> graph::getAdj(int i) {
 
 }
 
-void graph::BFS(int from, vector<pair<int, int>> &input) {
+void graph::BFS(int from, vector<pair<int, int>>& input) {
 
     int source = from;
 
     set<pair<int, int>> visited;
-    queue<pair<int, int>> queState;
+    queue<int> queState;
     vector < pair<pair<int, int>, int >> distance;
 
     vector<pair<int, int>> posOfAdjacents = input;
 
     visited.insert(make_pair(source, source));
-    queState.push(make_pair(source, source));
+    queState.push(source);
 
     while (queState.empty() != true) {
-        pair<int,int> currState = queState.front();
+        int currState = queState.front();
         queState.pop();
 
-        vector<pair<pair<int, int>, int>> neighbors = graph::getAdj(currState.first);
+        vector<pair<pair<int, int>, int>> neighbors = graph::getAdj(currState);
 
 
         for (int i = 0; i < neighbors.size(); i++) { //iterate thru adj
 
-            pair<int, int> adjState = neighbors[i].first;
+            pair<int, int> adjState = neighbors[i].first; //indexes of adjacent vertexes
 
-            if (visited.count(adjState) == 0) {
-                visited.insert(adjState);
+            if (visited.count(adjState) == 0) { //if vertices has not been visited
+                visited.insert(adjState); //insert vertex into visited set
 
-                input.push_back(adjState);
+                input.push_back(adjState); //push vertex into return vector
 
-                queState.push(adjState);
+                queState.push(neighbors[i].first.second); //push the "to" value into the queue
 
             }
         }
@@ -160,4 +174,3 @@ void graph::BFS(int from, vector<pair<int, int>> &input) {
 
 
 }
-
