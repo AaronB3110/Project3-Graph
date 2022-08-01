@@ -1,7 +1,0 @@
-{
-    "files.associations": {
-        "*.rmd": "markdown",
-        "*.tcc": "cpp",
-        "iosfwd": "cpp"
-    }
-}
