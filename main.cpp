@@ -547,7 +547,9 @@ void makeEdge(sf::RenderWindow& _window, map<int, pair<float,float>>& cords, vec
                         edge.push_back(make_pair(line[0], line[1]));
                         states[traversal[j].first].setFillColor(sf::Color::Red);
                         states[traversal[j].second].setFillColor(sf::Color::Red);
-                        visited.insert(make_pair(index, j));
+                        //visited.insert(make_pair(index, j));
+                        visited.insert(make_pair(traversal[j].first, traversal[j].second));
+                        visited.insert(make_pair(traversal[j].second, traversal[j].first)); // for duplicate edge
                     }
                 }
                 speed ++;
