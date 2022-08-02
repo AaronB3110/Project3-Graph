@@ -84,7 +84,7 @@ int main()
     int renderSpeed = 0.0;
     int speedReducer = 0;
     int timeElapsed = 0;
-    int speedFactor = 4;
+    int speedFactor = 5;
 
     sf::RenderWindow window(sf::VideoMode(1920, 1080), "Flight");
 
@@ -112,7 +112,7 @@ int main()
                     renderSpeed = 0;
                     speedReducer = 0;
                     timeElapsed = 0.0;
-                    speedFactor = 4;
+                    speedFactor = 5;
 
                     for(int i = 0; i < states.size(); i++) // reset all vertices
                     {
@@ -156,7 +156,7 @@ int main()
                 }
                 else if(speedDOWN.getGlobalBounds().contains(mousePos.x, mousePos.y)) // decrease speed of render
                 {
-                    if(speedFactor != 10 && algSelected)
+                    if(speedFactor != 20 && algSelected)
                     {
                         speedDOWN.setFillColor(sf::Color(60,60,60));
                         speedFactor ++;
@@ -332,6 +332,7 @@ void stateList(graph& graph, sf::RenderWindow& _window, sf::Font& font_1, map<in
     set<int> visited;
     visited.insert(index);
     vector<int> mileTotal(50, 0); // stores the distance by combining the distance of the origin vertex to the destination vertex
+    vector<int> passTotal(50,0); // stores total number of passengers
 
     int order = 1;
     float y = 245.0;
@@ -342,6 +343,7 @@ void stateList(graph& graph, sf::RenderWindow& _window, sf::Font& font_1, map<in
             visited.insert(traversal[i].second);
             y += 15.0;
             mileTotal[traversal[i].second] = mileTotal[traversal[i].first] + graph.stateGraph[traversal[i].first][traversal[i].second].second;
+            passTotal[traversal[i].second] = passTotal[traversal[i].first] + graph.stateGraph[traversal[i].first][traversal[i].second].first;
 
             string r = to_string(order);
             sf::Text rank;
@@ -351,7 +353,7 @@ void stateList(graph& graph, sf::RenderWindow& _window, sf::Font& font_1, map<in
             sf::Text state;
             createText(state, font_1, mapping[traversal[i].second].second, 14, 150.0, y);
 
-            string p = to_string(graph.stateGraph[traversal[i].first][traversal[i].second].first);
+            string p = to_string(passTotal[traversal[i].second]);//graph.stateGraph[traversal[i].first][traversal[i].second].first
             sf::Text passenger;
             createText(passenger, font_1, p, 14, 290.0, y);
 
@@ -646,7 +648,7 @@ void text(sf::RenderWindow& _window, sf::Font& font_1, string stateName, bool al
     }
 
     sf::Text down;
-    if(speedFactor == 10)
+    if(speedFactor == 12)
     {
         createText(down, font_1, "MIN", 18, 60.0, 1048);
     }
